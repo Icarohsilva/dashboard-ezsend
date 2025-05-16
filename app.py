@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 import plotly.express as px
 from datetime import datetime, timedelta
+import os
 
 # Configurações do app
 st.set_page_config(page_title="Dashboard eZSend One", layout="wide")
@@ -20,7 +21,8 @@ end_str = end_date.strftime("%d/%m/%Y")
 # Configs da API
 API_URL_GERAL = f"https://api.ezsend-one.eteg.app/events/internal/reports?startDate={start_str}&endDate={end_str}"
 API_URL_DETALHADO = f"https://api.ezsend-one.eteg.app/events/internal/reports?clientId={{client_id}}&startDate={start_str}&endDate={end_str}"
-HEADERS = {"x-api-key": "{{{ secrets.INTERNAL_TOKEN }}"}  # Trocar pela sua chave
+
+HEADERS = {"x-api-key": os.environ.get("x-api-key")}
 
 # Função para obter dados gerais
 def get_dados_gerais():
