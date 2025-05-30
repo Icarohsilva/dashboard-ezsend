@@ -18,6 +18,11 @@ end_date = st.sidebar.date_input("Data Fim", datetime.now())
 start_str = start_date.strftime("%d/%m/%Y")
 end_str = end_date.strftime("%d/%m/%Y")
 
+max_intervalo = 14  # máximo 14 dias
+if (end_date - start_date).days > max_intervalo:
+    st.warning(f"⚠️ Período muito longo. Tente no máximo {max_intervalo} dias.")
+    st.stop()
+
 # Configs da API
 API_URL_GERAL = f"https://api.ezsend-one.eteg.app/events/internal/reports?startDate={start_str}&endDate={end_str}"
 API_URL_DETALHADO = f"https://api.ezsend-one.eteg.app/events/internal/reports?clientId={{client_id}}&startDate={start_str}&endDate={end_str}"
@@ -61,7 +66,11 @@ if aba == "Relatório Geral":
                 "Falha no Envio": item["events"].get("notification:sent:failure", 0)
             })
 
-    df = pd.DataFrame(rows).sort_values(by="Envio com Sucesso", ascending=False)
+    df = pd.DataFrame(rows)
+    if df.empty:
+        st.warning("⚠️ Nenhum dado encontrado para o período selecionado ou erro interno da API.")
+        st.stop()
+    df = df.sort_values(by="Envio com Sucesso", ascending=False)
 
     # KPIs
     col1, col2, col3, col4 = st.columns(4)
