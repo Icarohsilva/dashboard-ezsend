@@ -18,7 +18,7 @@ end_date = st.sidebar.date_input("Data Fim", datetime.now())
 start_str = start_date.strftime("%d/%m/%Y")
 end_str = end_date.strftime("%d/%m/%Y")
 
-max_intervalo = 14  # máximo 14 dias
+max_intervalo =  4 # máximo 14 dias
 if (end_date - start_date).days > max_intervalo:
     st.warning(f"⚠️ Período muito longo. Tente no máximo {max_intervalo} dias.")
     st.stop()
